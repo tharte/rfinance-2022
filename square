@@ -1,0 +1,45 @@
+#!/usr/bin/Rscript --no-init-file
+
+library(argparse)
+
+square<- function(args) {
+    parser<- ArgumentParser()
+
+    parser$add_argument("square", 
+        type="integer",
+        help="display the square of a given number"
+    )
+
+    parser$add_argument("-v", "--verbosity", 
+        action="count",
+        default=0,
+        help="increase output verbosity"
+    )
+
+    args<-   parser$parse_args(args)
+    answer<- args$square^2
+
+    if (args$verbosity > 2) {
+        # o<- capture.output(library(help=argparse))
+        o<- capture.output(example("^"))
+
+        cat(sprintf("[verbosity level == %d]:\n", args$verbosity))
+        cat(sprintf(
+            "the square of %d equals %d, using the in-built arithmetic operator '^':\n",
+            args$square, answer
+        ))
+        cat(sprintf("%s\n", o))
+    }
+    else if (args$verbosity == 2) {
+        cat(sprintf("[verbosity level == %d]:\t", args$verbosity))
+        cat(sprintf("the square of %d equals %d\n", args$square, answer))
+    }
+    else if (args$verbosity == 1) {
+        cat(sprintf("the square of %d is %d\n", args$square, answer))
+    }
+    else {
+        cat(sprintf("answer = %d\n", answer))
+    }
+}
+
+square(args=commandArgs(trailingOnly=TRUE))
